@@ -3,207 +3,204 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>EMIAC Sales Command Live</title>
+<title>EMIAC Sales Command</title>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <style>
-:root{--gold:#c9a24b;--gold2:#e8cf8f;--ink:#0c1322;--bg:#f5f2ea;--card:#ffffff;--line:#e9e1cf;--red:#b42318;--green:#12714a;--mut:#6b7280}
+:root{--blue:#1a73e8;--blue-d:#1558b0;--bg:#f3f5fa;--card:#ffffff;--line:#e6eaf2;--ink:#17233f;--mut:#7b8499;--red:#d93025;--amber:#e8710a;--green:#188038;--gold:#c9a24b}
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:-apple-system,'Segoe UI',Roboto,Arial,sans-serif;background:radial-gradient(1200px 500px at 50% -100px,#fff8e6 0%,var(--bg) 55%);color:#141414;min-height:100vh;padding-bottom:70px}
-.hero{background:linear-gradient(135deg,#080d1a 0%,#101b33 45%,#1c2a4d 100%);color:#fff;position:relative;overflow:hidden}
-.hero::after{content:'';position:absolute;left:0;right:0;bottom:0;height:3px;background:linear-gradient(90deg,transparent,var(--gold) 20%,var(--gold2) 50%,var(--gold) 80%,transparent)}
-.wrap{max-width:1020px;margin:0 auto;padding:0 22px;position:relative}
-.topline{display:flex;align-items:center;gap:12px;padding:22px 0 4px;font-size:11.5px;letter-spacing:3px;color:var(--gold2);font-weight:700}
-.topline .dot{width:7px;height:7px;border-radius:50%;background:var(--gold);box-shadow:0 0 12px var(--gold)}
-.hero h1{font-size:38px;line-height:1.05;font-weight:800;letter-spacing:-.5px}
-.hero h1 em{color:var(--gold2);font-style:normal}
-.live{display:inline-block;font-size:11px;font-weight:800;letter-spacing:2px;color:#0c1322;background:var(--gold2);border-radius:999px;padding:4px 12px;margin-left:10px;vertical-align:middle}
-.sub{color:#c8d0e2;font-size:13.5px;margin:10px 0 20px;line-height:1.6}
-.sub b{color:#fff}
-.stats{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;padding:18px 0 22px}
-.scard{background:rgba(255,255,255,.07);border:1px solid rgba(201,162,75,.35);border-radius:16px;padding:13px 14px}
-.scard .n{font-size:26px;font-weight:800;color:#fff}
-.scard .l{font-size:10.5px;letter-spacing:1.6px;color:var(--gold2);font-weight:700;margin-top:4px}
-.scard.hot{border-color:#ff8a80;background:rgba(180,35,24,.22)}
-.scard.hot .n{color:#ffb4ab}
-.body{padding-top:20px}
-.panel{background:var(--card);border:1px solid var(--line);border-radius:20px;box-shadow:0 20px 50px rgba(20,20,40,.10);overflow:hidden;margin-bottom:16px}
-.panel-head{padding:18px 20px 12px;display:flex;gap:12px;flex-wrap:wrap;align-items:center;justify-content:space-between;border-bottom:1px solid #f0e9d6}
-.ptitle{font-size:15px;font-weight:800}
-.psub{font-size:12.5px;color:var(--mut);margin-top:3px;line-height:1.6}
-.pad{padding:14px 20px 18px}
-.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:10px}
-.inp{flex:1;min-width:220px;border:1px solid var(--line);background:#faf7ef;border-radius:10px;padding:10px 12px;font-size:13.5px;outline:0}
-select.inp{flex:0;min-width:0}
-.slot{flex:1;min-width:240px;border:1px solid var(--line);border-radius:12px;padding:10px 12px;font-size:13px;background:#fff}
-.slot b{display:block;font-size:13px}
-.slot small{color:var(--mut)}
-.warn{background:#fff7e6;border:1px solid var(--gold);color:#7a5c14;border-radius:10px;padding:9px 12px;font-size:12.5px;margin-top:10px;line-height:1.6;display:none}
-.stat2{font-size:12.5px;color:var(--mut);margin-top:10px;line-height:1.7}
-.stat2 b{color:#111}
-.search{flex:1;min-width:220px;display:flex;background:#faf7ef;border:1px solid var(--line);border-radius:12px;padding:2px 2px 2px 12px;align-items:center;gap:8px}
-.search input{flex:1;border:0;background:transparent;outline:0;font-size:14px;padding:10px 4px}
-.tabs{display:flex;gap:8px;flex-wrap:wrap}
-.tab{border:1px solid var(--line);background:#fff;padding:9px 14px;border-radius:999px;font-size:13px;font-weight:700;cursor:pointer;color:#444}
-.tab.on{background:var(--ink);color:#fff;border-color:var(--ink)}
-.tab .c{opacity:.65;font-weight:600}
-.hint{font-size:12px;color:var(--mut);padding:10px 20px 0;line-height:1.6}
-.cards{padding:14px 16px 18px;display:flex;flex-direction:column;gap:12px}
-.mail{background:#fff;border:1px solid var(--line);border-radius:16px;padding:15px 16px;position:relative;box-shadow:0 2px 10px rgba(0,0,0,.04)}
-.mail::before{content:'';position:absolute;left:0;top:14px;bottom:14px;width:4px;border-radius:4px;background:#ccc}
-.mail.pending::before{background:linear-gradient(var(--red),#f8786a)}
-.mail.replied::before{background:linear-gradient(var(--green),#4cc38a)}
-.mail.resolved::before{background:linear-gradient(var(--gold),var(--gold2))}
-.mail.attn{background:linear-gradient(0deg,#fffaf0,#fff)}
-.top{display:flex;gap:10px;align-items:flex-start;justify-content:space-between}
-.subj{font-size:15.5px;font-weight:700;line-height:1.4}
-.pill{flex-shrink:0;font-size:10.5px;font-weight:800;letter-spacing:1.2px;padding:5px 11px;border-radius:999px;margin-top:2px;white-space:nowrap}
-.pill.pending{background:#fdeceb;color:var(--red);border:1px solid #f5c6c0}
-.pill.replied{background:#e6f5ec;color:var(--green);border:1px solid #bfe6cf}
-.pill.resolved{background:#faf3dd;color:#7a5c14;border:1px solid var(--gold)}
-.pill.attn{background:#2b2113;color:var(--gold2);border:1px solid var(--gold);margin-left:6px}
-.box{display:inline-block;font-size:11px;font-weight:800;padding:3px 10px;border-radius:999px;background:#eef2ff;color:#3730a3;border:1px solid #c7d2fe;margin-right:6px}
-.box.b1{background:#faf3dd;color:#7a5c14;border-color:var(--gold)}
-.box.b2{background:#e8f0fe;color:#174ea6;border-color:#aecbfa}
-.box.b3{background:#f3e8ff;color:#6b21a8;border-color:#d8b4fe}
-.meta{font-size:12.8px;color:#4b5563;margin-top:7px;line-height:1.65}
-.meta b{color:#111}
-.snip{font-size:13.2px;color:#333;background:#faf8f2;border:1px solid #f0e8d5;border-radius:10px;padding:9px 11px;margin-top:9px;line-height:1.55}
-.actions{display:flex;gap:8px;margin-top:11px;flex-wrap:wrap;align-items:center}
-.btn{font-size:13px;font-weight:700;padding:9px 15px;border-radius:10px;cursor:pointer;text-decoration:none;border:1px solid transparent;display:inline-block}
-.btn.gold{background:linear-gradient(135deg,var(--gold),#a8822f);color:#fff}
+body{font-family:'Inter',-apple-system,'Segoe UI',Roboto,Arial,sans-serif;background:var(--bg);color:var(--ink);min-height:100vh}
+.side{position:fixed;left:0;top:0;bottom:0;width:252px;background:#fff;border-right:1px solid var(--line);padding:20px 14px;display:flex;flex-direction:column;gap:4px;z-index:20}
+.brand{display:flex;align-items:center;gap:10px;padding:2px 10px 16px}
+.brand .logo{width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,#0c1322,#2a3f6d);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:15px}
+.brand b{font-size:15px;display:block}.brand small{color:var(--mut);font-size:11px;display:flex;align-items:center;gap:5px}
+.livedot{width:7px;height:7px;border-radius:50%;background:#34a853;box-shadow:0 0 8px #34a853;display:inline-block}
+.navsec{font-size:10.5px;letter-spacing:1.6px;color:var(--mut);font-weight:800;padding:12px 12px 6px}
+.nitem{display:flex;align-items:center;gap:11px;padding:10px 12px;border-radius:11px;font-size:13.8px;font-weight:600;color:#3c445c;cursor:pointer;border:0;background:transparent;width:100%;text-align:left;transition:.15s}
+.nitem:hover{background:#f1f4fa}
+.nitem.on{background:#e8f0fe;color:var(--blue-d)}
+.nitem .ic{width:22px;text-align:center;font-size:15px}
+.nitem .bdg{margin-left:auto;background:#eef1f7;color:#5b6478;font-size:11px;font-weight:800;border-radius:999px;padding:2px 9px;min-width:26px;text-align:center}
+.nitem.on .bdg{background:#fff;color:var(--blue-d)}
+.nitem .mdot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+.sidefoot{margin-top:auto;border-top:1px solid var(--line);padding-top:10px;display:flex;flex-direction:column;gap:2px}
+.main{margin-left:252px;min-height:100vh}
+.topbar{position:sticky;top:0;z-index:10;background:rgba(243,245,250,.9);backdrop-filter:blur(10px);padding:16px 26px 10px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.topbar h1{font-size:21px;font-weight:800;letter-spacing:-.3px}
+.topbar .sub{font-size:12.5px;color:var(--mut);width:100%;margin-top:-4px}
+.search{flex:1;min-width:200px;display:flex;background:#fff;border:1px solid var(--line);border-radius:12px;padding:2px 2px 2px 13px;align-items:center;gap:8px;box-shadow:0 1px 3px rgba(20,30,60,.05)}
+.search input{flex:1;border:0;background:transparent;outline:0;font-size:14px;padding:10px 4px;color:var(--ink)}
+.ibtn{width:42px;height:42px;border-radius:12px;border:1px solid var(--line);background:#fff;cursor:pointer;font-size:17px;display:flex;align-items:center;justify-content:center;transition:.15s;box-shadow:0 1px 3px rgba(20,30,60,.05)}
+.ibtn:hover{border-color:var(--blue);transform:translateY(-1px)}
+.ibtn.spin{animation:spin 1s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}
+.wrap{padding:8px 26px 60px;max-width:1060px}
+.stats{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin:12px 0 16px}
+.scard{background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px 16px;cursor:pointer;transition:.16s;position:relative;overflow:hidden;box-shadow:0 1px 3px rgba(20,30,60,.05)}
+.scard:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(20,30,60,.10)}
+.scard::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:#c6cede}
+.scard.sP::before{background:var(--red)}.scard.sA::before{background:var(--amber)}.scard.sR::before{background:var(--green)}.scard.sD::before{background:var(--gold)}.scard.sT::before{background:var(--blue)}
+.scard .n{font-size:27px;font-weight:800}
+.scard .l{font-size:10.5px;letter-spacing:1.4px;color:var(--mut);font-weight:800;margin-top:3px}
+.scard.sel{outline:2px solid var(--blue);outline-offset:-2px}
+.mbtabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.mbtab{border:1px solid var(--line);background:#fff;padding:8px 15px;border-radius:999px;font-size:13px;font-weight:700;cursor:pointer;color:#4a5470;display:flex;align-items:center;gap:8px;transition:.15s}
+.mbtab:hover{border-color:var(--blue)}
+.mbtab.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.mbtab .mdot{width:9px;height:9px;border-radius:50%}
+.mbtab .c{opacity:.6;font-weight:600}
+.mail{background:#fff;border:1px solid var(--line);border-radius:16px;padding:13px 16px;margin-bottom:10px;display:flex;gap:13px;align-items:flex-start;transition:.16s;animation:fadeUp .3s ease;box-shadow:0 1px 3px rgba(20,30,60,.05)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.mail:hover{box-shadow:0 10px 26px rgba(20,30,60,.10)}
+.mail.attn{background:#fffdf6;border-color:#f3d9a7}
+.av{width:42px;height:42px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:15px}
+.mbody{flex:1;min-width:0}
+.mtop{display:flex;gap:8px;align-items:flex-start;justify-content:space-between}
+.msubj{font-size:14.5px;font-weight:700;line-height:1.4}
+.mmeta{font-size:12.3px;color:var(--mut);margin-top:3px}
+.mmeta b{color:#3c445c}
+.msnip{font-size:13px;color:#4a5470;margin-top:6px;line-height:1.55;background:#f7f9fd;border-radius:9px;padding:8px 11px}
+.mfoot{display:flex;gap:8px;margin-top:9px;flex-wrap:wrap;align-items:center}
+.pill{flex-shrink:0;font-size:10px;font-weight:800;letter-spacing:1.1px;padding:4px 10px;border-radius:999px;white-space:nowrap}
+.pill.pending{background:#fdeceb;color:var(--red)}
+.pill.replied{background:#e6f4ea;color:var(--green)}
+.pill.resolved{background:#faf3dd;color:#8a6a1c}
+.pill.attn{background:#fef3e2;color:var(--amber);border:1px solid #f5c98a;margin-left:0}
+.mtag{font-size:10.5px;font-weight:800;padding:3px 10px;border-radius:999px;background:#eef1f7;color:#5b6478}
+.mtime{font-size:12px;color:var(--mut);white-space:nowrap;text-align:right;line-height:1.6}
+.mtime b{color:var(--ink)}
+.btn{font-size:12.5px;font-weight:700;padding:8px 14px;border-radius:9px;cursor:pointer;text-decoration:none;border:1px solid transparent;display:inline-block;transition:.15s}
+.btn.gold{background:linear-gradient(135deg,#c9a24b,#a8822f);color:#fff}
 .btn.dark{background:var(--ink);color:#fff}
-.btn.ghost{background:#fff;border-color:var(--line);color:#333}
-.rsn{display:none;margin-top:10px;background:#0f1830;color:#e8e4d6;border-radius:12px;padding:11px 12px;font-size:12.5px;line-height:1.6;border:1px solid rgba(201,162,75,.4)}
+.btn.ghost{background:#fff;border-color:var(--line);color:#3c445c}
+.btn:hover{transform:translateY(-1px)}
+.skel{background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px;margin-bottom:10px}
+.skline{height:13px;border-radius:7px;background:linear-gradient(90deg,#eef1f7 25%,#e2e8f5 50%,#eef1f7 75%);background-size:200% 100%;animation:sh 1.2s infinite}
+@keyframes sh{to{background-position:-200% 0}}
+.rsn{display:none;margin-top:10px;background:#0f1830;color:#e8e4d6;border-radius:12px;padding:11px 12px;font-size:12.5px;line-height:1.6}
 .rsn.show{display:block}
 .rsn .opts{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px}
-.ropt{background:rgba(201,162,75,.15);border:1px solid var(--gold);color:var(--gold2);font-size:12.5px;font-weight:700;padding:8px 12px;border-radius:999px;cursor:pointer}
+.ropt{background:rgba(201,162,75,.15);border:1px solid var(--gold);color:#f0d992;font-size:12.5px;font-weight:700;padding:8px 12px;border-radius:999px;cursor:pointer}
 .ropt:hover{background:var(--gold);color:#111}
 .rcancel{background:transparent;border:0;color:#9aa3b8;font-size:12.5px;cursor:pointer;margin-left:4px}
-.done{font-size:12.5px;color:#7a5c14;background:#faf3dd;border:1px solid var(--gold);border-radius:10px;padding:8px 11px;margin-top:10px;line-height:1.6}
-.foot{text-align:center;color:#8a8a8a;font-size:12px;margin-top:18px;line-height:1.8}
-ol.steps{margin:8px 0 0 18px;font-size:13px;line-height:1.9;color:#333}
-ol.steps b{color:#111}
-@media(max-width:760px){.hero h1{font-size:29px}.stats{grid-template-columns:repeat(2,1fr)}.scard:last-child{grid-column:span 2}}
+.done{font-size:12.5px;color:#8a6a1c;background:#faf3dd;border:1px solid #e3cf9a;border-radius:10px;padding:8px 11px;margin-top:10px}
+.empty{text-align:center;color:var(--mut);padding:46px 20px;font-size:14px;line-height:1.9}
+.modal{position:fixed;inset:0;background:rgba(12,19,34,.5);display:none;align-items:flex-start;justify-content:center;z-index:50;padding:40px 16px;overflow:auto}
+.modal.open{display:flex}
+.mbox{background:#fff;border-radius:20px;max-width:640px;width:100%;padding:24px;box-shadow:0 30px 80px rgba(0,0,0,.3);animation:fadeUp .25s ease}
+.mbox h2{font-size:18px;margin-bottom:4px}.mbox .d{font-size:13px;color:var(--mut);line-height:1.7;margin-bottom:12px}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:10px}
+.inp{flex:1;min-width:200px;border:1px solid var(--line);background:#f7f9fd;border-radius:10px;padding:10px 12px;font-size:13.5px;outline:0;color:var(--ink)}
+select.inp{flex:0}
+.slot{flex:1;min-width:180px;border:1px solid var(--line);border-radius:12px;padding:10px 12px;font-size:13px;background:#fff}
+.slot b{display:block;font-size:13px}.slot small{color:var(--mut);word-break:break-all}
+.stat2{font-size:12.5px;color:var(--mut);margin-top:10px;line-height:1.7}
+.foot{text-align:center;color:#9aa3b8;font-size:12px;margin-top:22px;line-height:1.8}
+@media(max-width:860px){.side{position:static;width:100%;border-right:0;border-bottom:1px solid var(--line);padding:14px;flex-direction:column}.main{margin-left:0}.stats{grid-template-columns:repeat(2,1fr)}.scard:last-child{grid-column:span 2}.wrap{padding:8px 14px 60px}.topbar{padding:14px 14px 8px}}
 </style>
 </head>
 <body>
-<div class="hero"><div class="wrap">
-<div class="topline"><span class="dot"></span>EMIAC &bull; SALES COMMAND</div>
-<h1>Mail <em>Dashboard</em><span class="live">LIVE</span></h1>
-<p class="sub" id="upd">Gmail se seedha connected version. Neeche 3 mailbox connect karo.</p>
+<nav class="side">
+<div class="brand"><div class="logo">ES</div><div><b>EMIAC Sales</b><small><span class="livedot"></span> LIVE DASHBOARD</small></div></div>
+<div class="navsec">VIEWS</div>
+<button class="nitem on" id="nAll" onclick="setView('all')"><span class="ic">▦</span>Overview<span class="bdg" id="nAllC">0</span></button>
+<button class="nitem" id="nPen" onclick="setView('Pending')"><span class="ic">✉</span>Pending<span class="bdg" id="nPenC">0</span></button>
+<button class="nitem" id="nAtt" onclick="setView('Attention')"><span class="ic">⚠</span>Needs attention<span class="bdg" id="nAttC">0</span></button>
+<button class="nitem" id="nRep" onclick="setView('Replied')"><span class="ic">✓</span>Replied<span class="bdg" id="nRepC">0</span></button>
+<button class="nitem" id="nRes" onclick="setView('Resolved')"><span class="ic">★</span>Resolved<span class="bdg" id="nResC">0</span></button>
+<div class="navsec">MAILBOXES</div>
+<div id="mboxnav"></div>
+<div class="sidefoot">
+<button class="nitem" onclick="fetchAll(true)"><span class="ic">⟳</span>Refresh now</button>
+<button class="nitem" onclick="openSet()"><span class="ic">⚙</span>Settings</button>
+</div>
+</nav>
+<div class="main">
+<div class="topbar">
+<div><h1 id="vtitle">Overview</h1><div class="sub" id="upd">Connect karo, mails yahan ayenge.</div></div>
+<div class="search"><span style="color:#999">⌕</span><input id="q" placeholder="Search subject, sender..." oninput="draw()"></div>
+<button class="ibtn" id="rfbtn" onclick="fetchAll(true)" title="Refresh">⟳</button>
+<button class="ibtn" onclick="openSet()" title="Settings">⚙</button>
+</div>
+<div class="wrap">
 <div class="stats">
-<div class="scard"><div class="n" id="cAll">-</div><div class="l">TOTAL</div></div>
-<div class="scard"><div class="n" id="cPen">-</div><div class="l">PENDING</div></div>
-<div class="scard"><div class="n" id="cRep">-</div><div class="l">REPLIED</div></div>
-<div class="scard hot"><div class="n" id="cOld">-</div><div class="l">4H+ ATTENTION</div></div>
-<div class="scard"><div class="n" id="cRes" style="color:var(--gold2)">-</div><div class="l">RESOLVED</div></div>
+<div class="scard sT" onclick="setView('all')"><div class="n" id="cAll">-</div><div class="l">TOTAL</div></div>
+<div class="scard sP" onclick="setView('Pending')"><div class="n" id="cPen">-</div><div class="l">PENDING</div></div>
+<div class="scard sA" onclick="setView('Attention')"><div class="n" id="cOld" style="color:var(--amber)">-</div><div class="l">4H+ ATTENTION</div></div>
+<div class="scard sR" onclick="setView('Replied')"><div class="n" id="cRep">-</div><div class="l">REPLIED</div></div>
+<div class="scard sD" onclick="setView('Resolved')"><div class="n" id="cRes" style="color:#8a6a1c">-</div><div class="l">RESOLVED</div></div>
 </div>
-</div></div>
-<div class="wrap body">
-<div class="panel">
-<div class="panel-head"><div><div class="ptitle">1. Connection</div><div class="psub">Pehli baar 5 min ka setup hai (neeche steps). Uske baad ye page khud Gmail se live data layega.</div></div></div>
-<div class="pad">
-<div class="warn" id="filewarn">Ye file abhi directly khuli hai (file mode). Google login is mode me kaam nahi karega. Ise Netlify Drop ya Vercel par host karo, phir wale link se kholo.</div>
-<div class="row">
-<input class="inp" id="cid" placeholder="Google OAuth Client ID paste karo (....apps.googleusercontent.com)">
-<button class="btn dark" onclick="saveCid()">Save ID</button>
+<div class="mbtabs" id="mbtabs"></div>
+<div id="list"></div>
+<div class="foot">EMIAC Technologies &bull; live Gmail version &bull; <span id="next"></span></div>
 </div>
-<div class="psub" style="margin-top:8px">Is page ka origin (Cloud me add karna hai): <b id="origin">-</b></div>
+</div>
+<div class="modal" id="setmodal" onclick="if(event.target===this)closeSet()">
+<div class="mbox">
+<h2>⚙ Settings</h2>
+<div class="d">Connection aur refresh yahin se control hota hai. Client ID ek baar save karo, phir 3 mailbox connect karo.</div>
+<div class="row"><input class="inp" id="cid" placeholder="Google OAuth Client ID (...apps.googleusercontent.com)"><button class="btn dark" onclick="saveCid()">Save</button></div>
+<div class="d" style="margin-top:8px">Page origin (Cloud Console me Authorized JavaScript origins me hona chahiye): <b id="origin">-</b></div>
 <div class="row" id="slots"></div>
 <div class="row">
-<button class="btn gold" onclick="fetchAll(true)">Refresh now</button>
-<select class="inp" id="autosec" onchange="saveCfg()">
-<option value="0">Auto-refresh: Off</option>
-<option value="60">Auto-refresh: 1 min</option>
-<option value="120">Auto-refresh: 2 min</option>
-<option value="300">Auto-refresh: 5 min</option>
-<option value="900">Auto-refresh: 15 min</option>
-</select>
-<select class="inp" id="days" onchange="saveCfg();fetchAll(true)">
-<option value="3">Last 3 days</option>
-<option value="7">Last 7 days</option>
-<option value="14">Last 14 days</option>
-<option value="30">Last 30 days</option>
-</select>
-<label style="font-size:13px;color:#444"><input type="checkbox" id="nopromo" checked onchange="saveCfg();fetchAll(true)"> Promo/Social mails chhupao</label>
+<select class="inp" id="autosec" onchange="saveCfg()"><option value="0">Auto-refresh: Off</option><option value="60">1 min</option><option value="120">2 min</option><option value="300">5 min</option><option value="900">15 min</option></select>
+<select class="inp" id="days" onchange="saveCfg();fetchAll(true)"><option value="3">Last 3 days</option><option value="7">Last 7 days</option><option value="14">Last 14 days</option><option value="30">Last 30 days</option></select>
+<label style="font-size:13px"><input type="checkbox" id="nopromo" checked onchange="saveCfg();fetchAll(true)"> Promo/Social chhupao</label>
 </div>
 <div class="stat2" id="stat">Abhi koi mailbox connected nahi hai.</div>
-<div class="stat2" id="next"></div>
+<div class="row" style="margin-top:14px"><button class="btn dark" onclick="closeSet()">Done</button></div>
 </div>
-</div>
-<div class="panel">
-<div class="panel-head">
-<div class="search"><span style="color:#999">⌕</span><input id="q" placeholder="Search subject ya sender..." oninput="draw()"></div>
-<div class="tabs">
-<button class="tab on" id="bAll" onclick="setF('all')">All <span class="c" id="tAll"></span></button>
-<button class="tab" id="bPen" onclick="setF('Pending')">Pending <span class="c" id="tPen"></span></button>
-<button class="tab" id="bRep" onclick="setF('Replied')">Replied <span class="c" id="tRep"></span></button>
-<button class="tab" id="bRes" onclick="setF('Resolved')">Resolved <span class="c" id="tRes"></span></button>
-</div>
-</div>
-<div class="hint">Rule: last mail team ki connected ID se gaya = <b>Replied</b>, bahar se aaya = <b>Pending</b>. 4+ ghante Pending = <b>Attention</b>. Reply ki need na ho to <b>Resolve</b> dabao (reason ke saath). Team reply karte hi card khud Replied me badlega.</div>
-<div class="cards" id="list"></div>
-</div>
-<div class="panel">
-<div class="panel-head"><div><div class="ptitle">2. Pehli baar setup (sirf ek baar, 5 min)</div></div></div>
-<div class="pad"><ol class="steps">
-<li>Is file ko <b>Netlify Drop</b> (app.netlify.com/drop) par drag-drop karo. Jo link milega (jaise https://....netlify.app) use note karo.</li>
-<li><b>console.cloud.google.com</b> par naya project banao (naam: EMIAC Sales Dashboard), phir <b>APIs and Services &gt; Library</b> me <b>Gmail API</b> Enable karo.</li>
-<li><b>OAuth consent screen</b> me User type <b>Internal</b> chunno, app naam + support email bharo, scope me <b>gmail.readonly</b> add karo.</li>
-<li><b>Credentials &gt; Create Credentials &gt; OAuth client ID &gt; Web application</b>. <b>Authorized JavaScript origins</b> me Netlify wala link add karo. Client ID copy karo.</li>
-<li>Dashboard (Netlify link) kholo, upar Client ID paste karke Save karo, phir 3 mailbox ke <b>Connect</b> dabakar captain, ironman, batman chunno. Ho gaya, ab ye live hai.</li>
-</ol></div>
-</div>
-<div class="foot">EMIAC Technologies &bull; Live version &bull; Lark alert next step</div>
 </div>
 <script>
-const CLIENT_KEY='emiac_live_client_id',TOK_KEY='emiac_live_tokens_v1',RES_KEY='emiac_resolved_v1',CFG_KEY='emiac_live_cfg_v1';
-const BLOCK=['noreply@redditmail.com','english-quora-digest@quora.com','no-reply@email.claude.com','jun@asidehq.com','no-reply@asidehq.com','no-reply@accounts.google.com','noreply@notifications.zohovault.com','mailer-daemon@googlemail.com','position-tracking@semrush.com'];
-let MEMR={};
-const getR=()=>{try{const v=localStorage.getItem(RES_KEY);if(v)return JSON.parse(v);}catch(e){}return MEMR;};
-const setR=o=>{MEMR=o;try{localStorage.setItem(RES_KEY,JSON.stringify(o));}catch(e){}};
-const store={
-get:(k,d)=>{try{const v=localStorage.getItem(k);return v==null?d:JSON.parse(v);}catch(e){return d;}},
-set:(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
-};
-let TOK=store.get(TOK_KEY,{});Object.keys(TOK).forEach(k=>{if(TOK[k].expiry&&TOK[k].expiry<Date.now())TOK[k].expired=true;});
-const saveTok=()=>store.set(TOK_KEY,TOK);
-let CFG=store.get(CFG_KEY,{days:7,autosec:120,nopromo:true});
-let MAILS=[],F='all',fetching=false,pendingSlot=null,tc=null,nextAt=0;
-const $=id=>document.getElementById(id);
-const esc=s=>String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-const getCid=()=>{try{return localStorage.getItem(CLIENT_KEY)||'';}catch(e){return '';}};
-function saveCid(){const v=$('cid').value.trim();try{localStorage.setItem(CLIENT_KEY,v);}catch(e){}$('stat').innerHTML=v?'Client ID save ho gaya. Ab 3 mailbox connect karo.':'Client ID hataya gaya.';renderSlots();}
-function saveCfg(){CFG={days:parseInt($('days').value,10),autosec:parseInt($('autosec').value,10),nopromo:$('nopromo').checked};store.set(CFG_KEY,CFG);if(CFG.autosec>0)nextAt=Date.now()+CFG.autosec*1000;}
-function shortBox(email){return (email||'').split('@')[0]||'mail';}
-function setF(f){F=f;['bAll','bPen','bRep','bRes'].forEach(b=>$(b).classList.remove('on'));$(f==='all'?'bAll':f==='Pending'?'bPen':f==='Replied'?'bRep':'bRes').classList.add('on');draw();}
-function ensureTC(){const cid=getCid();if(!cid)return null;if(!tc||tc.cid!==cid){tc={cid:cid,client:google.accounts.oauth2.initTokenClient({client_id:cid,scope:'https://www.googleapis.com/auth/gmail.readonly',callback:tokCb})};}return tc.client;}
-function connect(i){const cid=getCid();if(!cid){$('stat').innerHTML='<b>Pehle Client ID save karo</b> (setup step 4-5).';return;}if(!window.google||!google.accounts){$('stat').innerHTML='Google login load nahi hua. Net check karke page reload karo.';return;}pendingSlot=i;try{ensureTC().requestAccessToken({prompt:'select_account'});}catch(e){$('stat').textContent='Login error: '+e.message;}}
+var CLIENT_KEY="emiac_live_client_id",TOK_KEY="emiac_live_tokens_v1",RES_KEY="emiac_resolved_v1",CFG_KEY="emiac_live_cfg_v1";
+var BLOCK=["noreply@redditmail.com","english-quora-digest@quora.com","no-reply@email.claude.com","jun@asidehq.com","no-reply@asidehq.com","no-reply@accounts.google.com","noreply@notifications.zohovault.com","mailer-daemon@googlemail.com","position-tracking@semrush.com"];
+var MEMR={};
+function getR(){try{var v=localStorage.getItem(RES_KEY);if(v)return JSON.parse(v);}catch(e){}return MEMR;}
+function setR(o){MEMR=o;try{localStorage.setItem(RES_KEY,JSON.stringify(o));}catch(e){}}
+var store={get:function(k,d){try{var v=localStorage.getItem(k);return v==null?d:JSON.parse(v);}catch(e){return d;}},set:function(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}};
+var TOK=store.get(TOK_KEY,{});Object.keys(TOK).forEach(function(k){if(TOK[k].expiry&&TOK[k].expiry<Date.now())TOK[k].expired=true;});
+function saveTok(){store.set(TOK_KEY,TOK);}
+var CFG=store.get(CFG_KEY,{days:7,autosec:120,nopromo:true});
+var MAILS=[],VIEW="all",MB="all",fetching=false,pendingSlot=null,tc=null,nextAt=0;
+function $(id){return document.getElementById(id);}
+function esc(s){return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+function getCid(){try{return localStorage.getItem(CLIENT_KEY)||"";}catch(e){return "";}}
+function openSet(){$("setmodal").classList.add("open");}
+function closeSet(){$("setmodal").classList.remove("open");}
+function saveCid(){var v=$("cid").value.trim();try{localStorage.setItem(CLIENT_KEY,v);}catch(e){}$("stat").innerHTML=v?"Client ID save ho gaya. Ab 3 mailbox connect karo.":"Client ID hataya gaya.";renderSlots();}
+function saveCfg(){CFG={days:parseInt($("days").value,10),autosec:parseInt($("autosec").value,10),nopromo:$("nopromo").checked};store.set(CFG_KEY,CFG);if(CFG.autosec>0)nextAt=Date.now()+CFG.autosec*1000;}
+function shortBox(e){return (e||"").split("@")[0]||"mail";}
+function boxColor(e){var h=0;e=String(e||"");for(var i=0;i<e.length;i++)h=(h*31+e.charCodeAt(i))%360;return "hsl("+h+",55%,45%)";}
+function avColor(name){var h=0;name=String(name||"?");for(var i=0;i<name.length;i++)h=(h*37+name.charCodeAt(i))%360;return "hsl("+h+",50%,46%)";}
+function initials(s){s=String(s||"?").trim();var parts=s.split(/[\s<@._-]+/).filter(Boolean);if(parts.length>=2)return (parts[0][0]+parts[1][0]).toUpperCase();return s.slice(0,2).toUpperCase();}
+function setView(v){VIEW=v;["nAll","nPen","nAtt","nRep","nRes"].forEach(function(b){$(b).classList.remove("on");});$({all:"nAll",Pending:"nPen",Attention:"nAtt",Replied:"nRep",Resolved:"nRes"}[v]).classList.add("on");$("vtitle").textContent={all:"Overview",Pending:"Pending replies",Attention:"Needs attention",Replied:"Replied",Resolved:"Resolved"}[v];draw();}
+function setMB(m){MB=m;draw();}
+function ensureTC(){var cid=getCid();if(!cid)return null;if(!tc||tc.cid!==cid){tc={cid:cid,client:google.accounts.oauth2.initTokenClient({client_id:cid,scope:"https://www.googleapis.com/auth/gmail.readonly",callback:tokCb})};}return tc.client;}
+function connect(i){var cid=getCid();if(!cid){openSet();$("stat").innerHTML="<b>Pehle Client ID save karo.</b>";return;}if(!window.google||!google.accounts){$("stat").textContent="Google login load nahi hua. Page reload karo.";openSet();return;}pendingSlot=i;try{ensureTC().requestAccessToken({prompt:"select_account"});}catch(e){$("stat").textContent="Login error: "+e.message;openSet();}}
 function disconnect(i){delete TOK[i];saveTok();renderSlots();draw();}
-function tokCb(resp){if(!resp||!resp.access_token){$('stat').textContent='Login cancel/fail hua. Dobara Connect dabao.';return;}const i=pendingSlot;TOK[i]={token:resp.access_token,expiry:Date.now()+((resp.expires_in||3600)*1000*0.95),email:TOK[i]?TOK[i].email:'',expired:false};saveTok();profileSlot(i);}
-async function gapi(slot,path){const t=TOK[slot];if(!t||!t.token)throw new Error('no-token');const r=await fetch('https://gmail.googleapis.com/gmail/v1'+path,{headers:{Authorization:'Bearer '+t.token}});if(r.status===401){t.expired=true;saveTok();throw new Error('expired');}if(!r.ok){let tx='';try{tx=await r.text();}catch(e){}throw new Error('ERR'+r.status+': '+tx.slice(0,140));}return r.json();}
-async function profileSlot(i){try{const p=await gapi(i,'/users/me/profile?fields=emailAddress');TOK[i].email=p.emailAddress;TOK[i].expired=false;saveTok();renderSlots();fetchAll(true);}catch(e){$('stat').textContent='Profile error: '+e.message;renderSlots();}}
-function mailto(email){return 'https://mail.google.com/mail/?authuser='+encodeURIComponent(email||'');}
-function buildQuery(){let q='in:inbox newer_than:'+CFG.days+'d';if(CFG.nopromo)q+=' -category:promotions -category:social';return q;}
-function parseAddr(s){s=String(s||'');const m=s.match(/<([^<>]+)>/);return (m?m[1]:s).trim().toLowerCase();}
-async function listThreads(slot,q){let ids=[],page=null;do{const d=await gapi(slot,'/users/me/threads?q='+encodeURIComponent(q)+'&maxResults=50'+(page?'&pageToken='+page:'')+'&fields=threads(id),nextPageToken');(d.threads||[]).forEach(t=>ids.push(t.id));page=d.nextPageToken;}while(page&&ids.length<100);return ids;}
-async function threadDetail(slot,id){const t=await gapi(slot,'/users/me/threads/'+id+'?format=METADATA&metadataHeaders=From&metadataHeaders=To&metadataHeaders=Subject&metadataHeaders=Date&fields=id,messages(id,internalDate,snippet,payload/headers)');const ms=t.messages||[];if(!ms.length)return null;const last=ms[ms.length-1];const H=n=>{const h=(last.payload&&last.payload.headers?last.payload.headers:[]).find(x=>x.name&&x.name.toLowerCase()===n);return h?h.value:'';};let subj=H('subject');if(!subj){for(let k=ms.length-1;k>=0;k--){const hh=(ms[k].payload&&ms[k].payload.headers?ms[k].payload.headers:[]).find(x=>x.name&&x.name.toLowerCase()==='subject');if(hh&&hh.value){subj=hh.value;break;}}}return {id:id,subject:subj||'(no subject)',lastFrom:H('from')||'',lastEmail:parseAddr(H('from')),lastTs:new Date(parseInt(last.internalDate,10)).toISOString(),count:ms.length,snip:last.snippet||''};}
-async function pool(items,n,fn){const out=[];let ix=0;const wk=async()=>{while(ix<items.length){const i=ix++;try{out.push(await fn(items[i]));}catch(e){out.push(null);}}};const ws=[];for(let k=0;k<n;k++)ws.push(wk());await Promise.all(ws);return out.filter(Boolean);}
-async function fetchAll(manual){const slots=[0,1,2].filter(i=>TOK[i]&&TOK[i].token&&!TOK[i].expired);if(!slots.length){const anyExp=[0,1,2].some(i=>TOK[i]&&TOK[i].expired);$('stat').innerHTML=anyExp?'Token expire ho gaya hai. Mailbox par <b>Reconnect</b> dabao.':'Abhi koi mailbox connected nahi hai. Upar Connect dabao.';return;}if(fetching)return;fetching=true;if(manual)$('stat').textContent='Loading... Gmail se fresh mails aa rahe hain.';const q=buildQuery();const team=new Set(slots.map(s=>(TOK[s].email||'').toLowerCase()).filter(Boolean));let all=[],errs=[];for(const s of slots){try{const ids=await listThreads(s,q);const det=await pool(ids,6,id=>threadDetail(s,id));det.forEach(d=>all.push(Object.assign(d,{slot:s,box:TOK[s].email||('Mailbox '+(s+1))})));}catch(e){errs.push('Mailbox '+(s+1)+': '+(e.message==='expired'?'token expired, Reconnect dabao':esc(e.message)));TOK[s].expired=(e.message==='expired');saveTok();}}$('stat').innerHTML=errs.length?('Note: '+errs.join(' | ')):(all.length+' threads mile ('+slots.length+' mailbox). Team reply karte hi status khud badlega.');MAILS=all.filter(r=>r.lastEmail&&BLOCK.indexOf(r.lastEmail)===-1).map(r=>Object.assign(r,{status:team.has(r.lastEmail)?'Replied':'Pending'})).sort((a,b)=>new Date(b.lastTs)-new Date(a.lastTs));fetching=false;if(CFG.autosec>0)nextAt=Date.now()+CFG.autosec*1000;renderSlots();draw();}
-function eff(r){const R=getR();return (R[r.box+'|'+r.id]||R[r.id])?'Resolved':r.status;}
-const hrs=ts=>(Date.now()-new Date(ts))/36e5;
-const fmt=ts=>new Date(ts).toLocaleString('en-IN',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit',hour12:true});
-function askRes(box,id){document.querySelectorAll('.rsn').forEach(x=>x.classList.remove('show'));const e=$('rsn-'+box+'-'+id);if(e)e.classList.add('show');}
-function hideRes(box,id){const e=$('rsn-'+box+'-'+id);if(e)e.classList.remove('show');}
-function doRes(box,id,reason){const o=getR();o[box+'|'+id]={at:new Date().toISOString(),reason:reason};setR(o);draw();}
-function undoRes(box,id){const o=getR();delete o[box+'|'+id];delete o[id];setR(o);draw();}
-function draw(){const R=getR();const q=($('q').value||'').toLowerCase();const rows=MAILS.map(r=>Object.assign({},r,{_e:eff(r),_h:hrs(r.lastTs)}));const cA=rows.length,cP=rows.filter(r=>r._e==='Pending').length,cR2=rows.filter(r=>r._e==='Replied').length,cRs=rows.filter(r=>r._e==='Resolved').length,cO=rows.filter(r=>r._e==='Pending'&&r._h>4).length;$('cAll').textContent=cA;$('cPen').textContent=cP;$('cRep').textContent=cR2;$('cRes').textContent=cRs;$('cOld').textContent=cO;$('tAll').textContent='('+cA+')';$('tPen').textContent='('+cP+')';$('tRep').textContent='('+cR2+')';$('tRes').textContent='('+cRs+')';$('upd').innerHTML=cA?('Live &bull; '+cA+' mails &bull; Updated '+new Date().toLocaleString('en-IN',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit',hour12:true})+' &bull; <b style="color:#fff">'+cP+' pending</b> me se <b style="color:var(--gold2)">'+cO+' ko 4+ ghante</b>'):'Gmail se seedha connected version. Neeche 3 mailbox connect karo.';const list=rows.filter(r=>(F==='all'||r._e===F)&&(r.subject.toLowerCase().includes(q)||r.lastEmail.toLowerCase().includes(q)||(r.snip||'').toLowerCase().includes(q)||shortBox(r.box).includes(q)));$('list').innerHTML=list.map(r=>{const hh=Math.floor(r._h),mm=Math.round((r._h-hh)*60);const age=r._h<1?mm+' min ago':hh+'h '+mm+'m ago';const attn=r._e==='Pending'&&r._h>4;let pill='<span class="pill '+r._e.toLowerCase()+'">'+r._e.toUpperCase()+'</span>'+(attn?'<span class="pill attn">4H+ ATTENTION</span>':'');let act='';if(r._e==='Pending'){act='<button class="btn gold" onclick="askRes(\''+esc(r.box)+'\',\''+r.id+'\')">Resolve</button><a class="btn dark" href="'+mailto(r.box)+'#inbox/'+r.id+'" target="_blank">Open in Gmail</a>';}else if(r._e==='Replied'){act='<a class="btn dark" href="'+mailto(r.box)+'#inbox/'+r.id+'" target="_blank">Open in Gmail</a>';}else{const info=R[r.box+'|'+r.id]||R[r.id]||{};act='<a class="btn dark" href="'+mailto(r.box)+'#inbox/'+r.id+'" target="_blank">Open in Gmail</a><button class="btn ghost" onclick="undoRes(\''+esc(r.box)+'\',\''+r.id+'\')">Undo resolve</button>';}let extra='';if(r._e==='Pending'){extra='<div class="rsn" id="rsn-'+esc(r.box)+'-'+r.id+'">Reply ki need nahi hai? Reason chunno:<div class="opts"><button class="ropt" onclick="doRes(\''+esc(r.box)+'\',\''+r.id+'\',\'Dusri ID se reply ho gaya\')">Dusri ID se reply</button><button class="ropt" onclick="doRes(\''+esc(r.box)+'\',\''+r.id+'\',\'CC me hu, need nahi\')">CC only</button><button class="ropt" onclick="doRes(\''+esc(r.box)+'\',\''+r.id+'\',\'Client ka reply pending\')">Client pending</button><button class="rcancel" onclick="hideRes(\''+esc(r.box)+'\',\''+r.id+'\')">cancel</button></div></div>';}if(r._e==='Resolved'){const info=R[r.box+'|'+r.id]||R[r.id]||{};extra='<div class="done">Resolved'+(info.reason?' - '+esc(info.reason):'')+(info.at?' - '+fmt(info.at):'')+'</div>';}return '<div class="mail '+r._e.toLowerCase()+(attn?' attn':'')+'"><div class="top"><div class="subj"><span class="box b'+(r.slot+1)+'">'+esc(shortBox(r.box))+'</span>'+esc(r.subject)+'</div><div>'+pill+'</div></div><div class="meta">From: <b>'+esc(r.lastFrom)+'</b><br>Last activity: '+fmt(r.lastTs)+' (<b>'+age+'</b>) &bull; '+r.count+' msgs</div><div class="snip">'+esc(r.snip)+'</div><div class="actions">'+act+'</div>'+extra+'</div>';}).join('')||'<p style="color:#888;padding:20px">Yahan mails ayenge. Upar mailbox connect karo.</p>';}
-function renderSlots(){const box=$('slots');let h='';for(let i=0;i<3;i++){const t=TOK[i];if(t&&t.email&&!t.expired){h+='<div class="slot"><b>Mailbox '+(i+1)+': '+esc(shortBox(t.email))+'</b><small>'+esc(t.email)+'</small><div style="margin-top:8px"><button class="btn ghost" onclick="disconnect('+i+')">Disconnect</button></div></div>';}else if(t&&t.expired){h+='<div class="slot"><b>Mailbox '+(i+1)+': expired</b><small>'+esc(t.email||'')+'</small><div style="margin-top:8px"><button class="btn gold" onclick="connect('+i+')">Reconnect</button></div></div>';}else{h+='<div class="slot"><b>Mailbox '+(i+1)+': not connected</b><small>captain / ironman / batman</small><div style="margin-top:8px"><button class="btn dark" onclick="connect('+i+')">Connect</button></div></div>';}}box.innerHTML=h;}
-setInterval(()=>{if(CFG.autosec>0&&nextAt){const s=Math.max(0,Math.round((nextAt-Date.now())/1000));$('next').textContent='Next auto-refresh: '+Math.floor(s/60)+':'+String(s%60).padStart(2,'0');if(s<=0)fetchAll(false);}else{$('next').textContent='Auto-refresh off hai.';}},1000);
-$('cid').value=getCid();$('days').value=String(CFG.days);$('autosec').value=String(CFG.autosec);$('nopromo').checked=CFG.nopromo!==false;
-$('origin').textContent=location.protocol==='file:'?'file mode (host karne ke baad yahan link ayega)':location.origin;
-if(location.protocol==='file:')$('filewarn').style.display='block';
-renderSlots();draw();
+function tokCb(resp){if(!resp||!resp.access_token){$("stat").textContent="Login cancel/fail hua. Dobara Connect dabao.";openSet();return;}var i=pendingSlot;TOK[i]={token:resp.access_token,expiry:Date.now()+((resp.expires_in||3600)*1000*0.95),email:TOK[i]?TOK[i].email:"",expired:false};saveTok();profileSlot(i);}
+function gapi(slot,path){var t=TOK[slot];if(!t||!t.token)return Promise.reject(new Error("no-token"));return fetch("https://gmail.googleapis.com/gmail/v1"+path,{headers:{Authorization:"Bearer "+t.token}}).then(function(r){if(r.status===401){t.expired=true;saveTok();throw new Error("expired");}if(!r.ok){return r.text().then(function(tx){throw new Error("ERR"+r.status+": "+String(tx||"").slice(0,140));});}return r.json();});}
+function profileSlot(i){gapi(i,"/users/me/profile?fields=emailAddress").then(function(p){TOK[i].email=p.emailAddress;TOK[i].expired=false;saveTok();renderSlots();fetchAll(true);}).catch(function(e){$("stat").textContent="Profile error: "+e.message;renderSlots();});}
+function mailto(email){return "https://mail.google.com/mail/?authuser="+encodeURIComponent(email||"");}
+function buildQuery(){var q="in:inbox newer_than:"+CFG.days+"d";if(CFG.nopromo)q+=" -category:promotions -category:social";return q;}
+function parseAddr(s){s=String(s||"");var m=s.match(/<([^<>]+)>/);return (m?m[1]:s).trim().toLowerCase();}
+function listThreads(slot,q){var ids=[],page=null;function one(){return gapi(slot,"/users/me/threads?q="+encodeURIComponent(q)+"&maxResults=50"+(page?"&pageToken="+page:"")+"&fields=threads(id),nextPageToken").then(function(d){(d.threads||[]).forEach(function(t){ids.push(t.id);});page=d.nextPageToken;if(page&&ids.length<100)return one();return ids;});}return one();}
+function threadDetail(slot,id){return gapi(slot,"/users/me/threads/"+id+"?format=METADATA&metadataHeaders=From&metadataHeaders=To&metadataHeaders=Subject&metadataHeaders=Date&fields=id,messages(id,internalDate,snippet,payload/headers)").then(function(t){var ms=t.messages||[];if(!ms.length)return null;var last=ms[ms.length-1];function H(n){var hs=(last.payload&&last.payload.headers?last.payload.headers:[]);for(var i=0;i<hs.length;i++){if(hs[i].name&&hs[i].name.toLowerCase()===n)return hs[i].value;}return "";}var subj=H("subject");if(!subj){for(var k=ms.length-1;k>=0;k--){var hs2=(ms[k].payload&&ms[k].payload.headers?ms[k].payload.headers:[]);for(var j=0;j<hs2.length;j++){if(hs2[j].name&&hs2[j].name.toLowerCase()==="subject"&&hs2[j].value){subj=hs2[j].value;break;}}if(subj)break;}}return {id:id,subject:subj||"(no subject)",lastFrom:H("from")||"",lastEmail:parseAddr(H("from")),lastTs:new Date(parseInt(last.internalDate,10)).toISOString(),count:ms.length,snip:last.snippet||""};});}
+function pool(items,n,fn){var out=[],ix=0;function wk(){if(ix>=items.length)return Promise.resolve();var i=ix++;return fn(items[i]).then(function(r){out.push(r);}).catch(function(){out.push(null);}).then(wk);}var ws=[];for(var k=0;k<n;k++)ws.push(wk());return Promise.all(ws).then(function(){return out.filter(Boolean);});}
+function fetchAll(manual){var slots=[0,1,2].filter(function(i){return TOK[i]&&TOK[i].token&&!TOK[i].expired;});if(!slots.length){var anyExp=[0,1,2].some(function(i){return TOK[i]&&TOK[i].expired;});$("stat").innerHTML=anyExp?"Token expire ho gaya hai. Mailbox par <b>Reconnect</b> dabao.":"Abhi koi mailbox connected nahi hai. Settings me Connect dabao.";skeleton(false);draw();return;}if(fetching)return;fetching=true;$("rfbtn").classList.add("spin");if(manual)$("stat").textContent="Loading... Gmail se fresh mails aa rahe hain.";skeleton(true);var q=buildQuery();var team={};slots.forEach(function(s){if(TOK[s].email)team[String(TOK[s].email).toLowerCase()]=1;});var all=[],errs=[],chain=Promise.resolve();slots.forEach(function(s){chain=chain.then(function(){return listThreads(s,q).then(function(ids){return pool(ids,6,function(id){return threadDetail(s,id);});}).then(function(det){det.forEach(function(d){d.slot=s;d.box=TOK[s].email||("Mailbox "+(s+1));all.push(d);});}).catch(function(e){errs.push("Mailbox "+(s+1)+": "+(e.message==="expired"?"token expired, Reconnect dabao":esc(e.message)));if(e.message==="expired"){TOK[s].expired=true;saveTok();}});});});chain.then(function(){$("stat").innerHTML=errs.length?("Note: "+errs.join(" | ")):(all.length+" threads mile ("+slots.length+" mailbox). Team reply karte hi status khud badlega.");MAILS=all.filter(function(r){return r.lastEmail&&BLOCK.indexOf(r.lastEmail)===-1;}).map(function(r){r.status=team[r.lastEmail]?"Replied":"Pending";return r;}).sort(function(a,b){return new Date(b.lastTs)-new Date(a.lastTs);});fetching=false;$("rfbtn").classList.remove("spin");if(CFG.autosec>0)nextAt=Date.now()+CFG.autosec*1000;renderSlots();draw();});}
+function eff(r){var R=getR();return (R[r.box+"|"+r.id]||R[r.id])?"Resolved":r.status;}
+function hrs(ts){return (Date.now()-new Date(ts))/36e5;}
+function fmt(ts){return new Date(ts).toLocaleString("en-IN",{day:"2-digit",month:"short",hour:"2-digit",minute:"2-digit",hour12:true});}
+function askRes(box,id){var els=document.querySelectorAll(".rsn");for(var i=0;i<els.length;i++)els[i].classList.remove("show");var e=$("rsn-"+String(box).replace(/[^a-z0-9]/gi,"")+"-"+id);if(e)e.classList.add("show");}
+function hideRes(box,id){var e=$("rsn-"+String(box).replace(/[^a-z0-9]/gi,"")+"-"+id);if(e)e.classList.remove("show");}
+function doRes(box,id,reason){var o=getR();o[box+"|"+id]={at:new Date().toISOString(),reason:reason};setR(o);draw();}
+function undoRes(box,id){var o=getR();delete o[box+"|"+id];delete o[id];setR(o);draw();}
+function mbList(){var m={},order=[];MAILS.forEach(function(r){if(!m[r.box]){m[r.box]={box:r.box,slot:r.slot,n:0};order.push(r.box);}m[r.box].n++;});order.sort(function(a,b){return m[a].slot-m[b].slot;});return order.map(function(k){return m[k];});}
+function skeleton(on){if(!on)return;var h="";for(var i=0;i<5;i++)h+='<div class="skel"><div class="skline" style="width:45%"></div><div style="height:8px"></div><div class="skline" style="width:90%"></div><div style="height:8px"></div><div class="skline" style="width:70%"></div></div>';$("list").innerHTML=h;}
+function draw(){var R=getR();var q=($("q").value||"").toLowerCase();var rows=MAILS.map(function(r){var c={};for(var k in r)c[k]=r[k];c._e=eff(r);c._h=hrs(r.lastTs);return c;});var mbrows=MB==="all"?rows:rows.filter(function(r){return r.box===MB;});function C(f){return mbrows.filter(function(r){return f==="all"||(f==="Attention"?(r._e==="Pending"&&r._h>4):r._e===f);}).length;}var cA=mbrows.length,cP=C("Pending"),cO=C("Attention"),cR=C("Replied"),cRs=C("Resolved");$("cAll").textContent=cA;$("cPen").textContent=cP;$("cRep").textContent=cR;$("cRes").textContent=cRs;$("cOld").textContent=cO;$("nAllC").textContent=rows.length;$("nPenC").textContent=rows.filter(function(r){return r._e==="Pending";}).length;$("nAttC").textContent=rows.filter(function(r){return r._e==="Pending"&&r._h>4;}).length;$("nRepC").textContent=rows.filter(function(r){return r._e==="Replied";}).length;$("nResC").textContent=rows.filter(function(r){return r._e==="Resolved";}).length;var mbs=mbList();var mhtml='<button class="mbtab'+(MB==="all"?" on":"")+'" onclick="setMB(\'all\')"><span class="mdot" style="background:#1a73e8"></span>All mailboxes<span class="c">('+rows.length+')</span></button>'+mbs.map(function(m){return '<button class="mbtab'+(MB===m.box?" on":"")+'" onclick="setMB(\''+esc(m.box)+'\')"><span class="mdot" style="background:'+boxColor(m.box)+'"></span>'+esc(shortBox(m.box))+'<span class="c">('+m.n+')</span></button>';}).join("");$("mbtabs").innerHTML=mhtml;var nh='<button class="nitem'+(MB==="all"?" on":"")+'" onclick="setMB(\'all\')"><span class="mdot" style="background:#1a73e8"></span>All<span class="bdg">'+rows.length+'</span></button>'+mbs.map(function(m){return '<button class="nitem'+(MB===m.box?" on":"")+'" onclick="setMB(\''+esc(m.box)+'\')"><span class="mdot" style="background:'+boxColor(m.box)+'"></span>'+esc(shortBox(m.box))+'<span class="bdg">'+m.n+'</span></button>';}).join("");$("mboxnav").innerHTML=nh;var name=MB==="all"?"All mailboxes":shortBox(MB);$("upd").innerHTML=cA?("Live &bull; "+esc(name)+" &bull; "+cA+" mails &bull; Updated "+new Date().toLocaleString("en-IN",{day:"2-digit",month:"short",hour:"2-digit",minute:"2-digit",hour12:true})+" &bull; <b>"+cP+" pending</b>, <b style='color:var(--amber)'>"+cO+" attention</b>"):"Mailbox connect karo (Settings).";var list=mbrows.filter(function(r){var okV=(VIEW==="all"||(VIEW==="Attention"?(r._e==="Pending"&&r._h>4):r._e===VIEW));return okV&&(r.subject.toLowerCase().indexOf(q)>=0||r.lastEmail.toLowerCase().indexOf(q)>=0||String(r.snip||"").toLowerCase().indexOf(q)>=0);});$("list").innerHTML=list.map(function(r){var hh=Math.floor(r._h),mm=Math.round((r._h-hh)*60);var age=r._h<1?mm+" min ago":hh+"h "+mm+"m ago";var attn=r._e==="Pending"&&r._h>4;var key=String(r.box).replace(/[^a-z0-9]/gi,"");var pill='<span class="pill '+r._e.toLowerCase()+'">'+r._e.toUpperCase()+'</span>'+(attn?'<span class="pill attn">4H+</span>':"");var act="";if(r._e==="Pending"){act='<button class="btn gold" onclick="askRes(\''+esc(r.box)+'\',\''+r.id+'\')">Resolve</button><a class="btn dark" href="'+mailto(r.box)+"#inbox/"+r.id+'" target="_blank">Open in Gmail</a>';}else if(r._e==="Replied"){act='<a class="btn dark" href="'+mailto(r.box)+"#inbox/"+r.id+'" target="_blank">Open in Gmail</a>';}else{var info=R[r.box+"|"+r.id]||R[r.id]||{};act='<a class="btn dark" href="'+mailto(r.box)+"#inbox/"+r.id+'" target="_blank">Open in Gmail</a><button class="btn ghost" onclick="undoRes(\''+esc(r.box)+'\',\''+r.id+'\')">Undo</button>';}var extra="";if(r._e==="Pending"){extra='<div class="rsn" id="rsn-'+key+"-"+r.id+'">Reply ki need nahi? Reason chunno:<div class="opts"><button class="ropt" onclick="doRes(\''+esc(r.box)+'\',\''+r.id+'\',\'Dusri ID se reply ho gaya\')">Dusri ID se reply</button><button class="ropt" onclick="doRes(\''+esc(r.box)+'\',\''+r.id+'\',\'CC me hu, need nahi\')">CC only</button><button class="ropt" onclick="doRes(\''+esc(r.box)+'\',\''+r.id+'\',\'Client ka reply pending\')">Client pending</button><button class="rcancel" onclick="hideRes(\''+esc(r.box)+'\',\''+r.id+'\')">cancel</button></div></div>';}if(r._e==="Resolved"){var info2=R[r.box+"|"+r.id]||R[r.id]||{};extra='<div class="done">Resolved'+(info2.reason?" - "+esc(info2.reason):"")+(info2.at?" - "+fmt(info2.at):"")+'</div>';}return '<div class="mail'+(attn?" attn":"")+'"><div class="av" style="background:'+avColor(r.lastFrom)+'">'+esc(initials(r.lastFrom))+'</div><div class="mbody"><div class="mtop"><div class="msubj">'+esc(r.subject)+'</div><div class="mtime">'+fmt(r.lastTs)+'<br><b>'+age+'</b></div></div><div class="mmeta">From <b>'+esc(r.lastFrom)+'</b> &bull; <span class="mtag">'+esc(shortBox(r.box))+'</span> '+pill+' &bull; '+r.count+' msgs</div><div class="msnip">'+esc(r.snip)+'</div><div class="mfoot">'+act+'</div>'+extra+'</div></div>';}).join("")||'<div class="empty">Yahan koi mail nahi hai.<br>Mailbox connect karo ya filter badlo.</div>';}
+function renderSlots(){var box=$("slots");if(!box)return;var h="";for(var i=0;i<3;i++){var t=TOK[i];if(t&&t.email&&!t.expired){h+='<div class="slot"><b>Mailbox '+(i+1)+": "+esc(shortBox(t.email))+'</b><small>'+esc(t.email)+'</small><div style="margin-top:8px"><button class="btn ghost" onclick="disconnect('+i+')">Disconnect</button></div></div>';}else if(t&&t.expired){h+='<div class="slot"><b>Mailbox '+(i+1)+': expired</b><small>'+esc(t.email||"")+'</small><div style="margin-top:8px"><button class="btn gold" onclick="connect('+i+')">Reconnect</button></div></div>';}else{h+='<div class="slot"><b>Mailbox '+(i+1)+': not connected</b><small>captain / ironman / batman</small><div style="margin-top:8px"><button class="btn dark" onclick="connect('+i+')">Connect</button></div></div>';}}box.innerHTML=h;}
+setInterval(function(){if(CFG.autosec>0&&nextAt){var s=Math.max(0,Math.round((nextAt-Date.now())/1000));$("next").textContent="Next auto-refresh: "+Math.floor(s/60)+":"+String(s%60).padStart(2,"0");if(s<=0)fetchAll(false);}else{$("next").textContent="Auto-refresh off hai.";}},1000);
+$("cid").value=getCid();$("days").value=String(CFG.days);$("autosec").value=String(CFG.autosec);$("nopromo").checked=CFG.nopromo!==false;
+$("origin").textContent=location.protocol==="file:"?"file mode (host karke kholo)":location.origin;
+renderSlots();draw();fetchAll(false);
 </script>
 </body>
 </html>
