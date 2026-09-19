@@ -155,11 +155,16 @@ select.inp{flex:0}
 </div>
 </div>
 <script>
-var CLIENT_KEY="emiac_live_client_id",TOK_KEY="emiac_live_tokens_v1",RES_KEY="emiac_resolved_v1",CFG_KEY="emiac_live_cfg_v1";
+var CLIENT_KEY="emiac_live_client_id",TOK_KEY="emiac_live_tokens_v1",RES_KEY="emiac_resolved_v1",CFG_KEY="emiac_live_cfg_v1",SHARE_KEY="emiac_shared_view_v1";
+var RBIN="ff808181a09d98f701a0b8d636bd4498";
+var RBIN_URL="https://api.restful-api.dev/objects/"+RBIN;
 var BLOCK=["noreply@redditmail.com","english-quora-digest@quora.com","no-reply@email.claude.com","jun@asidehq.com","no-reply@asidehq.com","no-reply@accounts.google.com","noreply@notifications.zohovault.com","mailer-daemon@googlemail.com","position-tracking@semrush.com"];
 var MEMR={};
 function getR(){try{var v=localStorage.getItem(RES_KEY);if(v)return JSON.parse(v);}catch(e){}return MEMR;}
-function setR(o){MEMR=o;try{localStorage.setItem(RES_KEY,JSON.stringify(o));}catch(e){}}
+function setR(o){MEMR=o;try{localStorage.setItem(RES_KEY,JSON.stringify(o));}catch(e){}pushResolves();}
+function pullResolves(){try{return fetch(RBIN_URL,{cache:"no-store"}).then(function(r){return r.ok?r.json():null;}).then(function(j){if(j&&j.data&&j.data.resolves){MEMR=j.data.resolves||{};try{localStorage.setItem(RES_KEY,JSON.stringify(MEMR));}catch(e){}draw();}return true;}).catch(function(){return true;});}catch(e){return Promise.resolve(true);}}
+var pushT=null;
+function pushResolves(){if(pushT)clearTimeout(pushT);pushT=setTimeout(function(){try{fetch(RBIN_URL).then(function(r){return r.json();}).then(function(cur){var payload={name:"emiac-resolves-v1",data:{resolves:MEMR,updatedAt:new Date().toISOString()}};return fetch(RBIN_URL,{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)});}).catch(function(){});}catch(e){}},800);}
 var store={get:function(k,d){try{var v=localStorage.getItem(k);return v==null?d:JSON.parse(v);}catch(e){return d;}},set:function(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}};
 var TOK=store.get(TOK_KEY,{});Object.keys(TOK).forEach(function(k){if(TOK[k].expiry&&TOK[k].expiry<Date.now())TOK[k].expired=true;});
 function saveTok(){store.set(TOK_KEY,TOK);}
@@ -214,7 +219,7 @@ setInterval(function(){if(CFG.autosec>0&&nextAt){var s=Math.max(0,Math.round((ne
 $("cid").value=getCid();$("days").value=String(CFG.days);$("autosec").value=String(CFG.autosec);$("nopromo").checked=CFG.nopromo!==false;
 $("origin").textContent=location.protocol==="file:"?"file mode (host karke kholo)":location.origin;
 $("ghpat").value=getPat();$("autoshare").checked=autoShareOn();
-renderSlots();draw();loadShared().then(function(){fetchAll(false);});
+renderSlots();draw();loadShared().then(function(){return pullResolves();}).then(function(){fetchAll(false);setInterval(pullResolves,30000);});
 </script>
 </body>
 </html>
