@@ -94,6 +94,7 @@ select.inp{flex:0}
 .slot b{display:block;font-size:13px}.slot small{color:var(--mut);word-break:break-all}
 .stat2{font-size:12.5px;color:var(--mut);margin-top:10px;line-height:1.7}
 .foot{text-align:center;color:#9aa3b8;font-size:12px;margin-top:22px;line-height:1.8}
+.sharebar{background:#e8f0fe;border:1px solid #aecbfa;color:#174ea6;font-size:12.5px;font-weight:600;border-radius:12px;padding:10px 14px;margin:12px 0 0;line-height:1.6;display:none}
 @media(max-width:860px){.side{position:static;width:100%;border-right:0;border-bottom:1px solid var(--line);padding:14px;flex-direction:column}.main{margin-left:0}.stats{grid-template-columns:repeat(2,1fr)}.scard:last-child{grid-column:span 2}.wrap{padding:8px 14px 60px}.topbar{padding:14px 14px 8px}}
 </style>
 </head>
@@ -121,6 +122,7 @@ select.inp{flex:0}
 <button class="ibtn" onclick="openSet()" title="Settings">⚙</button>
 </div>
 <div class="wrap">
+<div class="sharebar" id="sharebar">Shared view load ho raha hai...</div>
 <div class="stats">
 <div class="scard sT" onclick="setView('all')"><div class="n" id="cAll">-</div><div class="l">TOTAL</div></div>
 <div class="scard sP" onclick="setView('Pending')"><div class="n" id="cPen">-</div><div class="l">PENDING</div></div>
@@ -136,7 +138,7 @@ select.inp{flex:0}
 <div class="modal" id="setmodal" onclick="if(event.target===this)closeSet()">
 <div class="mbox">
 <h2>⚙ Settings</h2>
-<div class="d">Connection aur refresh yahin se control hota hai. Client ID ek baar save karo, phir 3 mailbox connect karo.</div>
+<div class="d">Connection aur refresh yahin se control hota hai. Client ID ek baar save karo, phir 3 mailbox connect karo. <b>Shared view:</b> neeche token save karne ke baad ye browser khud snapshot share karega, phir link jiske paas bhi hai use bina login wahi data dikhega.</div>
 <div class="row"><input class="inp" id="cid" placeholder="Google OAuth Client ID (...apps.googleusercontent.com)"><button class="btn dark" onclick="saveCid()">Save</button></div>
 <div class="d" style="margin-top:8px">Page origin (Cloud Console me Authorized JavaScript origins me hona chahiye): <b id="origin">-</b></div>
 <div class="row" id="slots"></div>
@@ -145,6 +147,9 @@ select.inp{flex:0}
 <select class="inp" id="days" onchange="saveCfg();fetchAll(true)"><option value="3">Last 3 days</option><option value="7">Last 7 days</option><option value="14">Last 14 days</option><option value="30">Last 30 days</option></select>
 <label style="font-size:13px"><input type="checkbox" id="nopromo" checked onchange="saveCfg();fetchAll(true)"> Promo/Social chhupao</label>
 </div>
+<div class="row"><input class="inp" id="ghpat" type="password" placeholder="GitHub token (sirf owner laptop me, auto-share ke liye)"><button class="btn dark" onclick="savePat()">Save</button></div>
+<label style="font-size:13px"><input type="checkbox" id="autoshare" checked onchange="saveCfg2()"> Auto-share on (ye browser khula rahe to snapshot update hota rahega)</label>
+<div class="stat2" id="sharest">Shared snapshot: -</div>
 <div class="stat2" id="stat">Abhi koi mailbox connected nahi hai.</div>
 <div class="row" style="margin-top:14px"><button class="btn dark" onclick="closeSet()">Done</button></div>
 </div>
@@ -185,7 +190,15 @@ function parseAddr(s){s=String(s||"");var m=s.match(/<([^<>]+)>/);return (m?m[1]
 function listThreads(slot,q){var ids=[],page=null;function one(){return gapi(slot,"/users/me/threads?q="+encodeURIComponent(q)+"&maxResults=50"+(page?"&pageToken="+page:"")+"&fields=threads(id),nextPageToken").then(function(d){(d.threads||[]).forEach(function(t){ids.push(t.id);});page=d.nextPageToken;if(page&&ids.length<100)return one();return ids;});}return one();}
 function threadDetail(slot,id){return gapi(slot,"/users/me/threads/"+id+"?format=METADATA&metadataHeaders=From&metadataHeaders=To&metadataHeaders=Subject&metadataHeaders=Date&fields=id,messages(id,internalDate,snippet,payload/headers)").then(function(t){var ms=t.messages||[];if(!ms.length)return null;var last=ms[ms.length-1];function H(n){var hs=(last.payload&&last.payload.headers?last.payload.headers:[]);for(var i=0;i<hs.length;i++){if(hs[i].name&&hs[i].name.toLowerCase()===n)return hs[i].value;}return "";}var subj=H("subject");if(!subj){for(var k=ms.length-1;k>=0;k--){var hs2=(ms[k].payload&&ms[k].payload.headers?ms[k].payload.headers:[]);for(var j=0;j<hs2.length;j++){if(hs2[j].name&&hs2[j].name.toLowerCase()==="subject"&&hs2[j].value){subj=hs2[j].value;break;}}if(subj)break;}}return {id:id,subject:subj||"(no subject)",lastFrom:H("from")||"",lastEmail:parseAddr(H("from")),lastTs:new Date(parseInt(last.internalDate,10)).toISOString(),count:ms.length,snip:last.snippet||""};});}
 function pool(items,n,fn){var out=[],ix=0;function wk(){if(ix>=items.length)return Promise.resolve();var i=ix++;return fn(items[i]).then(function(r){out.push(r);}).catch(function(){out.push(null);}).then(wk);}var ws=[];for(var k=0;k<n;k++)ws.push(wk());return Promise.all(ws).then(function(){return out.filter(Boolean);});}
-function fetchAll(manual){var slots=[0,1,2].filter(function(i){return TOK[i]&&TOK[i].token&&!TOK[i].expired;});if(!slots.length){var anyExp=[0,1,2].some(function(i){return TOK[i]&&TOK[i].expired;});$("stat").innerHTML=anyExp?"Token expire ho gaya hai. Mailbox par <b>Reconnect</b> dabao.":"Abhi koi mailbox connected nahi hai. Settings me Connect dabao.";skeleton(false);draw();return;}if(fetching)return;fetching=true;$("rfbtn").classList.add("spin");if(manual)$("stat").textContent="Loading... Gmail se fresh mails aa rahe hain.";skeleton(true);var q=buildQuery();var team={};slots.forEach(function(s){if(TOK[s].email)team[String(TOK[s].email).toLowerCase()]=1;});var all=[],errs=[],chain=Promise.resolve();slots.forEach(function(s){chain=chain.then(function(){return listThreads(s,q).then(function(ids){return pool(ids,6,function(id){return threadDetail(s,id);});}).then(function(det){det.forEach(function(d){d.slot=s;d.box=TOK[s].email||("Mailbox "+(s+1));all.push(d);});}).catch(function(e){errs.push("Mailbox "+(s+1)+": "+(e.message==="expired"?"token expired, Reconnect dabao":esc(e.message)));if(e.message==="expired"){TOK[s].expired=true;saveTok();}});});});chain.then(function(){$("stat").innerHTML=errs.length?("Note: "+errs.join(" | ")):(all.length+" threads mile ("+slots.length+" mailbox). Team reply karte hi status khud badlega.");MAILS=all.filter(function(r){return r.lastEmail&&BLOCK.indexOf(r.lastEmail)===-1;}).map(function(r){r.status=team[r.lastEmail]?"Replied":"Pending";return r;}).sort(function(a,b){return new Date(b.lastTs)-new Date(a.lastTs);});fetching=false;$("rfbtn").classList.remove("spin");if(CFG.autosec>0)nextAt=Date.now()+CFG.autosec*1000;renderSlots();draw();});}
+function fetchAll(manual){var slots=[0,1,2].filter(function(i){return TOK[i]&&TOK[i].token&&!TOK[i].expired;});if(!slots.length){var anyExp=[0,1,2].some(function(i){return TOK[i]&&TOK[i].expired;});$("stat").innerHTML=anyExp?"Token expire ho gaya hai. Mailbox par <b>Reconnect</b> dabao.":"Abhi koi mailbox connected nahi hai. Settings me Connect dabao.";skeleton(false);draw();return;}if(fetching)return;fetching=true;$("rfbtn").classList.add("spin");if(manual)$("stat").textContent="Loading... Gmail se fresh mails aa rahe hain.";skeleton(true);var q=buildQuery();var team={};slots.forEach(function(s){if(TOK[s].email)team[String(TOK[s].email).toLowerCase()]=1;});var all=[],errs=[],chain=Promise.resolve();slots.forEach(function(s){chain=chain.then(function(){return listThreads(s,q).then(function(ids){return pool(ids,6,function(id){return threadDetail(s,id);});}).then(function(det){det.forEach(function(d){d.slot=s;d.box=TOK[s].email||("Mailbox "+(s+1));all.push(d);});}).catch(function(e){errs.push("Mailbox "+(s+1)+": "+(e.message==="expired"?"token expired, Reconnect dabao":esc(e.message)));if(e.message==="expired"){TOK[s].expired=true;saveTok();}});});});chain.then(function(){$("stat").innerHTML=errs.length?("Note: "+errs.join(" | ")):(all.length+" threads mile ("+slots.length+" mailbox). Team reply karte hi status khud badlega.");MAILS=all.filter(function(r){return r.lastEmail&&BLOCK.indexOf(r.lastEmail)===-1;}).map(function(r){r.status=(r.lastEmail===String(r.box||"").toLowerCase())?"Replied":"Pending";return r;}).sort(function(a,b){return new Date(b.lastTs)-new Date(a.lastTs);});fetching=false;$("rfbtn").classList.remove("spin");if(CFG.autosec>0)nextAt=Date.now()+CFG.autosec*1000;renderSlots();draw();pushShared();});}
+var GH={owner:"captainamerica-del",repo:"sales-mail-dashboard",path:"dashboard-data.json",branch:"main"};
+function b64(s){return btoa(unescape(encodeURIComponent(s)));}
+function getPat(){try{return localStorage.getItem("emiac_gh_pat")||"";}catch(e){return "";}}
+function savePat(){var v=$("ghpat").value.trim();try{if(v)localStorage.setItem("emiac_gh_pat",v);else localStorage.removeItem("emiac_gh_pat");}catch(e){}$("sharest").textContent=v?"Token save ho gaya. Auto-share on rakho.":"Token hataya gaya.";}
+function autoShareOn(){try{return localStorage.getItem("emiac_autoshare")!=="off";}catch(e){return true;}}
+function saveCfg2(){try{localStorage.setItem("emiac_autoshare",$("autoshare").checked?"on":"off");}catch(e){}}
+function loadShared(){var done=function(ok){return ok;};try{return fetch("dashboard-data.json?t="+Date.now()).then(function(r){if(!r.ok)throw 0;return r.json();}).then(function(j){var rows=(j&&j.rows)||[];if(rows.length){MAILS=rows;draw();var bar=$("sharebar");if(bar){bar.style.display="block";bar.innerHTML="Shared view &bull; updated "+fmt(j.updatedAt)+" &bull; "+rows.length+" mails &bull; login ki need nahi";}$("stat").innerHTML="Shared snapshot loaded ("+rows.length+" mails). Live mode ke liye Settings me Connect karo.";}return true;}).catch(function(){var b2=$("sharebar");if(b2)b2.style.display="none";return true;});}catch(e){var b3=$("sharebar");if(b3)b3.style.display="none";return Promise.resolve(true);}}
+function pushShared(){var pat=getPat();if(!pat||!autoShareOn()||!MAILS.length)return;var body={updatedAt:new Date().toISOString(),rows:MAILS};var url="https://api.github.com/repos/"+GH.owner+"/"+GH.repo+"/contents/"+GH.path;fetch(url+"?ref="+GH.branch,{headers:{Accept:"application/vnd.github+json",Authorization:"Bearer "+pat}}).then(function(r){return r.ok?r.json():null;}).then(function(cur){var payload={message:"snapshot "+new Date().toISOString(),content:b64(JSON.stringify(body)),branch:GH.branch};if(cur&&cur.sha)payload.sha=cur.sha;return fetch(url,{method:"PUT",headers:{Accept:"application/vnd.github+json",Authorization:"Bearer "+pat,"Content-Type":"application/json"},body:JSON.stringify(payload)});}).then(function(r){if(r&&r.ok){$("sharest").textContent="Shared ✓ "+new Date().toLocaleString("en-IN",{hour:"2-digit",minute:"2-digit"});}else{$("sharest").textContent="Share fail (token/repo check karo).";}}).catch(function(){});}
 function eff(r){var R=getR();return (R[r.box+"|"+r.id]||R[r.id])?"Resolved":r.status;}
 function hrs(ts){return (Date.now()-new Date(ts))/36e5;}
 function fmt(ts){return new Date(ts).toLocaleString("en-IN",{day:"2-digit",month:"short",hour:"2-digit",minute:"2-digit",hour12:true});}
@@ -200,7 +213,8 @@ function renderSlots(){var box=$("slots");if(!box)return;var h="";for(var i=0;i<
 setInterval(function(){if(CFG.autosec>0&&nextAt){var s=Math.max(0,Math.round((nextAt-Date.now())/1000));$("next").textContent="Next auto-refresh: "+Math.floor(s/60)+":"+String(s%60).padStart(2,"0");if(s<=0)fetchAll(false);}else{$("next").textContent="Auto-refresh off hai.";}},1000);
 $("cid").value=getCid();$("days").value=String(CFG.days);$("autosec").value=String(CFG.autosec);$("nopromo").checked=CFG.nopromo!==false;
 $("origin").textContent=location.protocol==="file:"?"file mode (host karke kholo)":location.origin;
-renderSlots();draw();fetchAll(false);
+$("ghpat").value=getPat();$("autoshare").checked=autoShareOn();
+renderSlots();draw();loadShared().then(function(){fetchAll(false);});
 </script>
 </body>
 </html>
